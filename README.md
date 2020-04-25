@@ -94,3 +94,9 @@ fan:
             entity_id: input_select.fan_osc
         speeds: ['off', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 ```
+
+# Screenshot
+![image](/Screenshot/fan.png)
+
+## custom ui
+![image](/Screenshot/fanui.png)
