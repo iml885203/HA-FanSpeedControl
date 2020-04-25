@@ -1,5 +1,5 @@
 # HA-FanSpeedControl
-A python script for Home Assistant that control fan speed with Fan Template and Broadlink.
+A python script for Home Assistant that control fan speed with [Fan Template](https://www.home-assistant.io/integrations/fan.template/) and [Broadlink](https://www.home-assistant.io/integrations/broadlink/).
 
 # How it work
 The script automatically call broadlink service when you set fan speed.
