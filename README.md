@@ -96,7 +96,7 @@ fan:
 ```
 
 # Screenshot
-![image](/Screenshot/fan.png)
+![image](https://github.com/iml885203/HA-FanSpeedControl/blob/master/Screenshot/fan.png?raw=true)
 
 ## custom ui
-![image](/Screenshot/fanui.png)
+![image](https://github.com/iml885203/HA-FanSpeedControl/blob/master/Screenshot/fanui.png?raw=true)
