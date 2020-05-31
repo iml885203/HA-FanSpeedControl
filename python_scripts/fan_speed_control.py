@@ -1,16 +1,18 @@
-# broadlink data
-increase_code = data.get('increase_code')
-decrease_code = data.get('decrease_code')
-broadlink_host = data.get('broadlink_host')
+#### Init
+service_domain = data.get('service_domain')
+service = data.get('service')
+service_data_increase = data.get('service_data_increase')
+service_data_decrease = data.get('service_data_decrease')
 # fan speed data
 speed = data.get('fan_speed')
 status_speed = hass.states.get(data.get('fan_speed_entity_id'))
 fan = hass.states.get(data.get('fan_entity_id'))
 speed_list = fan.attributes.get('speed_list')
 
-# logger.warning('<fan_speed_control> fan state ({})'.format(fan.state))
-# logger.warning('<fan_speed_control> Received fan speed from ({}) to ({})'.format(status_speed.state, speed))
+logger.debug('<fan_speed_control> fan state ({})'.format(fan.state))
+logger.debug('<fan_speed_control> Received fan speed from ({}) to ({})'.format(status_speed.state, speed))
 
+### def
 def check_speed(logger, speed, speed_list):
   if speed is None:
     logger.warning('<fan_speed_control> Received fan speed is invalid (None)')
@@ -34,6 +36,8 @@ def check_speed(logger, speed, speed_list):
 
   return True
 
+
+### Run
 if check_speed(logger, speed, speed_list):
   speed = int(speed)
   last_speed = int(status_speed.state) if status_speed.state else 1
@@ -49,21 +53,28 @@ if check_speed(logger, speed, speed_list):
   # check use increase or decrease
   if decrease_loop < increase_loop:
     loop = decrease_loop
-    service_data = {'host': broadlink_host, 'packet': decrease_code}
+    service_data = service_data_decrease
   else:
     loop = increase_loop
-    service_data = {'host': broadlink_host, 'packet': increase_code}
-
-  # Set the IP address to match the one used by your Broadlink device
-  for i in range(loop):
-    hass.services.call('broadlink', 'send', service_data, False)
-    # logger.warning('<fan_speed_control> call service_data')
-    time.sleep(0.5)
+    service_data = service_data_increase
 
   # update speed state
   hass.states.set(data.get('fan_speed_entity_id'), speed)
+
+  # Call service
+  if data.get('support_num_repeats', False):
+    service_data['num_repeats'] = loop
+    logger.debug('<fan_speed_control> call service ({}.{}) {}'.format(service_domain, service, service_data))
+    hass.services.call(service_domain, service, service_data)
+  else:
+    for i in range(loop):
+      logger.debug('<fan_speed_control> call service ({}.{}) {}'.format(service_domain, service, service_data))
+      result = hass.services.call(service_domain, service, service_data)
+      time.sleep(0.75)
+
+
 elif fan.state is not 'off' and speed == 'off':
-  # logger.warning('<fan_speed_control> call fan off')
+  logger.debug('<fan_speed_control> call fan off')
   hass.services.call('fan', 'turn_off', {
     'entity_id': data.get('fan_entity_id')
   })
