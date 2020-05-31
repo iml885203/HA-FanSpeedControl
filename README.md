@@ -16,19 +16,60 @@ example3: call `decrease` fan 2 times when you set fan speed from 2 to 12.
 
 
 # Installation
-Copy the Python script in to your /config/python_scripts directory.
+Copy the Python script in to your /config/python_scripts directory or install via HACS.
 
 # Script arguments
 |key|required|type|description|
 |-|-|-|-|
 |fan_speed|true|string|speed from fan template|
-|increase_code|true|string|increase fan seppd code|
-|decrease_code|true|string|decrease fan seppd code|
-|broadlink_host|true|string|broadlink ip address|
 |fan_speed_entity_id|true|string||
 |fan_entity_id|true|string||
+|service_domain|true|string||
+|service|true|string||
+|service_data_increase|true|object||
+|service_data_decrease|true|object||
 
 # Config Example
+config on fan `set_speed`
+## Broadlink switch
+```yaml
+set_speed:
+  - service: python_script.fan_speed_control
+    data_template:
+      fan_speed: "{{ speed }}"
+      fan_speed_entity_id: 'input_text.status_fan_speed'
+      fan_entity_id: 'fan.bedroom_fan'
+      service_domain: 'broadlink'
+      service: 'send'
+      service_data_increase:
+        host: 192.168.0.0
+        packet: !secret broadlink_ir_fan_increase
+      service_data_decrease:
+        host: 192.168.0.0
+        packet: !secret broadlink_ir_fan_decrease
+```
+
+## Remote service
+```yaml
+set_speed:
+  - service: python_script.fan_speed_control
+    data_template:
+      fan_speed: "{{ speed }}"
+      fan_speed_entity_id: 'input_text.status_fan_speed'
+      fan_entity_id: 'fan.bedroom_fan'
+      service_domain: 'remote'
+      service: 'send_command'
+      service_data_increase:
+        entity_id: remote.broadlink
+        device: fan
+        command: increase
+      service_data_decrease:
+        entity_id: remote.broadlink
+        device: fan
+        command: decrease
+```
+
+## Template Fan config
 ```yaml
 input_boolean:
   status_fan_power:
@@ -37,14 +78,13 @@ input_boolean:
 input_text:
   status_fan_speed:
     name: 'Fan Speed'
-  home_notify_word:
 
 input_select:
   fan_osc:
     name: 'Fan osc'
     options:
-      - true
-      - false
+      - 'True'
+      - 'False'
 fan:
   - platform: template
     fans:
@@ -59,8 +99,8 @@ fan:
             state: 'off'
           - service: broadlink.send
             data:
-                host: 192.168.0.0
-                packet: your_
+              host: 192.168.0.0
+              packet: your_fan_power_toggle_code
           - service: input_boolean.turn_on
             entity_id: input_boolean.status_fan_power
         turn_off:
@@ -69,30 +109,43 @@ fan:
             state: 'on'
           - service: broadlink.send
             data:
-                host: 192.168.0.0
-                packet: your_fan_power_toggle_code
+              host: 192.168.0.0
+              packet: your_fan_power_toggle_code
           - service: input_boolean.turn_off
             entity_id: input_boolean.status_fan_power
         set_speed:
           - service: python_script.fan_speed_control
             data_template:
-                fan_speed: "{{ speed }}"
-                increase_code: your_fan_increase_speed_code
-                decrease_code: your_fan_decrease_speed_code
-                broadlink_host: 192.168.0.0
-                fan_speed_entity_id: 'input_text.status_fan_speed'
-                fan_entity_id: 'fan.bedroom_fan'
+              service_domain: 'remote'
+              service: 'send_command'
+              service_data_increase:
+                entity_id: remote.broadlink
+                device: fan
+                command: increase
+              service_data_decrease:
+                entity_id: remote.broadlink
+                device: fan
+                command: decrease
         set_oscillating:
           - condition: state
             entity_id: input_boolean.status_fan_power
             state: 'on'
           - service: broadlink.send
             data:
-                host: 192.168.0.0
-                packet: your_fan_osc_toggle_code
+              host: 192.168.0.0
+              packet: your_fan_osc_toggle_code
           - service: input_select.select_next
             entity_id: input_select.fan_osc
         speeds: ['off', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+```
+
+# Debug
+add logger to your `configuration.yaml`
+```yaml
+logger:
+  default: warn
+  logs:
+    homeassistant.components.python_script.fan_speed_control.py: debug
 ```
 
 # Screenshot
