@@ -31,23 +31,6 @@ Copy the Python script in to your /config/python_scripts directory or install vi
 
 # Config Example
 config on fan `set_speed`
-## Broadlink switch
-```yaml
-set_speed:
-  - service: python_script.fan_speed_control
-    data_template:
-      fan_speed: "{{ speed }}"
-      fan_speed_entity_id: 'input_text.status_fan_speed'
-      fan_entity_id: 'fan.bedroom_fan'
-      service_domain: 'broadlink'
-      service: 'send'
-      service_data_increase:
-        host: 192.168.0.0
-        packet: !secret broadlink_ir_fan_increase
-      service_data_decrease:
-        host: 192.168.0.0
-        packet: !secret broadlink_ir_fan_decrease
-```
 
 ## Remote service
 ```yaml
@@ -97,20 +80,22 @@ fan:
           - condition: state
             entity_id: input_boolean.status_fan_power
             state: 'off'
-          - service: broadlink.send
+          - service: remote.send_command
             data:
-              host: 192.168.0.0
-              packet: your_fan_power_toggle_code
+              entity_id: remote.broadlink
+              device: fan
+              command: toggle
           - service: input_boolean.turn_on
             entity_id: input_boolean.status_fan_power
         turn_off:
           - condition: state
             entity_id: input_boolean.status_fan_power
             state: 'on'
-          - service: broadlink.send
+          - service: remote.send_command
             data:
-              host: 192.168.0.0
-              packet: your_fan_power_toggle_code
+              entity_id: remote.broadlink
+              device: fan
+              command: toggle
           - service: input_boolean.turn_off
             entity_id: input_boolean.status_fan_power
         set_speed:
@@ -130,10 +115,11 @@ fan:
           - condition: state
             entity_id: input_boolean.status_fan_power
             state: 'on'
-          - service: broadlink.send
+          - service: remote.send_command
             data:
-              host: 192.168.0.0
-              packet: your_fan_osc_toggle_code
+              entity_id: remote.broadlink
+              device: fan
+              command: oscillate
           - service: input_select.select_next
             entity_id: input_select.fan_osc
         speeds: ['off', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
