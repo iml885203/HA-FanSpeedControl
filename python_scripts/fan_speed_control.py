@@ -4,7 +4,7 @@ service = data.get('service')
 service_data_increase = data.get('service_data_increase')
 service_data_decrease = data.get('service_data_decrease')
 # fan speed data
-speed = data.get('fan_speed')
+speed = str(data.get('fan_speed'))
 status_speed = hass.states.get(data.get('fan_speed_entity_id'))
 fan = hass.states.get(data.get('fan_entity_id'))
 speed_list = fan.attributes.get('speed_list')
@@ -18,12 +18,12 @@ def check_speed(logger, speed, speed_list):
     logger.warning('<fan_speed_control> Received fan speed is invalid (None)')
     return False
 
-  if speed not in speed_list:
-    logger.warning('<fan_speed_control> Received fan speed is invalid ({})'.format(speed))
-    return False
-
   if not isinstance(speed, str):
     logger.warning('<fan_speed_control> speed variable is not string')
+    return False
+
+  if str(speed) not in speed_list:
+    logger.warning('<fan_speed_control> Received fan speed is invalid ({})'.format(speed))
     return False
 
   if not speed.isnumeric():
