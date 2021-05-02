@@ -4,33 +4,21 @@ service = data.get('service')
 service_data_increase = data.get('service_data_increase')
 service_data_decrease = data.get('service_data_decrease')
 # fan speed data
-speed = str(data.get('fan_speed'))
-status_speed = hass.states.get(data.get('fan_speed_entity_id'))
-fan = hass.states.get(data.get('fan_entity_id'))
-speed_list = fan.attributes.get('speed_list')
+speed = data.get('fan_speed')
+speed_count = data.get('fan_speed_count')
+fan_speed_entity = hass.states.get(data.get('fan_speed_entity_id'))
+fan_entity = hass.states.get(data.get('fan_entity_id'))
 
-logger.debug('<fan_speed_control> fan state ({})'.format(fan.state))
-logger.debug('<fan_speed_control> Received fan speed from ({}) to ({})'.format(status_speed.state, speed))
+logger.debug('<fan_speed_control> fan state ({})'.format(fan_entity.state))
+logger.debug('<fan_speed_control> Received fan speed from ({}) to ({})'.format(fan_speed_entity.state, speed))
 
 ### def
-def check_speed(logger, speed, speed_list):
+def check_speed(logger, speed):
   if speed is None:
     logger.warning('<fan_speed_control> Received fan speed is invalid (None)')
     return False
 
-  if not isinstance(speed, str):
-    logger.warning('<fan_speed_control> speed variable is not string')
-    return False
-
-  if str(speed) not in speed_list:
-    logger.warning('<fan_speed_control> Received fan speed is invalid ({})'.format(speed))
-    return False
-
-  if not speed.isnumeric():
-    logger.warning('<fan_speed_control> speed variable is not numeric: ({})'.format(speed))
-    return False
-
-  if fan.state is 'off':
+  if fan_entity.state is 'off':
     logger.warning('<fan_speed_control> can not change speed when fan is off')
     return False
 
@@ -38,17 +26,18 @@ def check_speed(logger, speed, speed_list):
 
 
 ### Run
-if check_speed(logger, speed, speed_list):
-  speed = int(speed)
-  last_speed = int(status_speed.state) if status_speed.state else 1
-  speed_max = int(speed_list[-1])
+if check_speed(logger, speed):
+  speed_step = 100 // speed_count
+  target_speed = int(speed) // speed_step
+  last_speed = int(fan_speed_entity.state) // speed_step if fan_speed_entity.state else 1
+  speed_max = speed_count
 
-  if speed > last_speed:
-    increase_loop = speed - last_speed
-    decrease_loop = last_speed + speed_max - speed
+  if target_speed > last_speed:
+    increase_loop = target_speed - last_speed
+    decrease_loop = last_speed + speed_max - target_speed
   else:
-    increase_loop = speed + speed_max - last_speed
-    decrease_loop = last_speed - speed
+    increase_loop = target_speed + speed_max - last_speed
+    decrease_loop = last_speed - target_speed
 
   # check use increase or decrease
   if decrease_loop < increase_loop:
@@ -73,7 +62,7 @@ if check_speed(logger, speed, speed_list):
       time.sleep(0.75)
 
 
-elif fan.state is not 'off' and speed == 'off':
+elif fan_entity.state is not 'off' and speed == 'off':
   logger.debug('<fan_speed_control> call fan off')
   hass.services.call('fan', 'turn_off', {
     'entity_id': data.get('fan_entity_id')
