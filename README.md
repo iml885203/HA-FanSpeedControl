@@ -27,6 +27,7 @@ Copy the Python script in to your `/config/python_scripts` directory or install 
 |fan_speed|true|string|speed from fan template|
 |fan_speed_entity_id|true|string||
 |fan_entity_id|true|string||
+|fan_speed_count|true|integer||
 |service_domain|true|string||
 |service|true|string||
 |service_data_increase|true|object||
