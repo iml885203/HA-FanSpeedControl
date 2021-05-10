@@ -139,3 +139,13 @@ logger:
 
 ## custom ui
 ![image](https://github.com/iml885203/HA-FanSpeedControl/blob/master/Screenshot/fanui.png?raw=true)
+
+
+
+<br><br>
+<p align="center">
+<br>
+<a href="https://www.buymeacoffee.com/dodoro" target="_blank">
+  <img src="https://github.com/appcraftstudio/buymeacoffee/raw/master/Images/snapshot-bmc-button.png" width="300">
+</a>
+</p>
