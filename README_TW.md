@@ -1,6 +1,6 @@
 # HA-FanSpeedControl
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 [![Donate](https://img.shields.io/badge/donate-Coffee-yellow.svg)](https://www.buymeacoffee.com/dodoro)
 
 用於Home Assistant的Python腳本，使用[Fan Template](https://www.home-assistant.io/integrations/fan.template/)和[Broadlink](https://www.home-assistant.io/integrations/broadlink/)控制風扇速度。
