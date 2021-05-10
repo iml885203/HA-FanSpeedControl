@@ -1,6 +1,9 @@
 # HA-FanSpeedControl
 A python script for Home Assistant that control fan speed with [Fan Template](https://www.home-assistant.io/integrations/fan.template/) and [Broadlink](https://www.home-assistant.io/integrations/broadlink/).
 
+- [Chinese Document](https://github.com/iml885203/HA-FanSpeedControl/blob/master/README_TW.md)
+- [English Document](https://github.com/iml885203/HA-FanSpeedControl/blob/master/README.md)
+
 # How it work
 The script automatically call broadlink service when you set fan speed.
 
@@ -16,7 +19,7 @@ example3: call `decrease` fan 2 times when you set fan speed from 2 to 12.
 
 
 # Installation
-Copy the Python script in to your /config/python_scripts directory or install via HACS.
+Copy the Python script in to your `/config/python_scripts` directory or install via HACS.
 
 # Script arguments
 |key|required|type|description|
@@ -30,16 +33,16 @@ Copy the Python script in to your /config/python_scripts directory or install vi
 |service_data_decrease|true|object||
 
 # Config Example
-config on fan `set_speed`
+`set_percentage` on template fan
 
-## Remote service
 ```yaml
-set_speed:
+set_percentage:
   - service: python_script.fan_speed_control
     data_template:
-      fan_speed: "{{ speed }}"
+      fan_speed: "{{ percentage }}"
       fan_speed_entity_id: 'input_text.status_fan_speed'
       fan_entity_id: 'fan.bedroom_fan'
+      fan_speed_count: 12
       service_domain: 'remote'
       service: 'send_command'
       service_data_increase:
@@ -127,7 +130,6 @@ fan:
               command: oscillate
           - service: input_select.select_next
             entity_id: input_select.fan_osc
-        speeds: ['off', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 ```
 
 # Debug
