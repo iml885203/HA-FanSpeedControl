@@ -73,8 +73,9 @@ fan:
     fans:
       bedroom_fan:
         friendly_name: "myFan"
+        speed_count: 12
         value_template: "{{ states('input_boolean.status_fan_power') }}"
-        speed_template: "{{ states('input_text.status_fan_speed') }}"
+        percentage_template: "{{ states('input_text.status_fan_speed') | int }}"
         oscillating_template: "{{ states('input_select.fan_osc') }}"
         turn_on:
           - condition: state
@@ -98,9 +99,13 @@ fan:
               command: toggle
           - service: input_boolean.turn_off
             entity_id: input_boolean.status_fan_power
-        set_speed:
+        set_percentage:
           - service: python_script.fan_speed_control
             data_template:
+              fan_speed: "{{ percentage }}"
+              fan_speed_entity_id: 'input_text.status_fan_speed'
+              fan_entity_id: 'fan.bedroom_fan'
+              fan_speed_count: 12
               service_domain: 'remote'
               service: 'send_command'
               service_data_increase:
