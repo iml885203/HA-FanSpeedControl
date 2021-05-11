@@ -22,10 +22,16 @@ example2: call `decrease` fan 3 times when you set fan speed from 5 to 2.
 
 example3: call `decrease` fan 2 times when you set fan speed from 2 to 12.
 
-
-
 # Installation
-Copy the Python script in to your `/config/python_scripts` directory or install via HACS.
+enable [python_script](https://www.home-assistant.io/integrations/python_script/) for your HomeAssistant.
+
+- Add to `configuration.yaml`: `python_script:`
+- Create folder `<config>/python_scripts`
+- restart HomeAssistant
+
+Find `Fan Speed Control` on HACS automation category.
+
+Or you can copy the Python script in to your `<config>/python_scripts` directory.
 
 # Script arguments
 |key|required|type|description|
