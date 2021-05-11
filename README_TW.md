@@ -23,7 +23,15 @@
 
 
 # 安裝
-複製Python腳本到你的`/config/python_scripts`資料夾裡面，或者透過HACS安裝
+在 HomeAssistant 啟用 [python_script](https://www.home-assistant.io/integrations/python_script/)
+
+- 增加`python_script:`到你的`configuration.yaml`
+- 創建資料夾 `<config>/python_scripts`
+- 重新啟動 HomeAssistant
+
+在HACS的automation分類裡面找到`Fan Speed Control`安裝
+
+或是直接複製Python腳本到你的`<config>/python_scripts`資料夾裡面
 
 # 參數
 |key|required|type|description|
