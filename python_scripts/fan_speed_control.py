@@ -29,7 +29,7 @@ def check_speed(logger, speed):
 if check_speed(logger, speed):
   speed_step = 100 // speed_count
   target_speed = int(speed) // speed_step
-  last_speed = int(fan_speed_entity.state) // speed_step if fan_speed_entity.state else 1
+  last_speed = int(float(fan_speed_entity.state)) // speed_step if fan_speed_entity.state else 1
   speed_max = speed_count
 
   if target_speed > last_speed:
