@@ -48,7 +48,10 @@ if check_speed(logger, speed):
     service_data = service_data_increase
 
   # update speed state
-  hass.states.set(data.get('fan_speed_entity_id'), speed)
+  hass.services.call('input_number', 'set_value', {
+    'entity_id': data.get('fan_speed_entity_id'),
+    'value': speed
+  })
 
   # Call service
   if data.get('support_num_repeats', False):
