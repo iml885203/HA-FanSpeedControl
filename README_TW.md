@@ -6,13 +6,16 @@
 用於Home Assistant的Python腳本，使用[Fan Template](https://www.home-assistant.io/integrations/fan.template/)和[Broadlink](https://www.home-assistant.io/integrations/broadlink/)控制風扇速度。
 
 # 說明
+
 - [中文說明](https://github.com/iml885203/HA-FanSpeedControl/blob/master/README_TW.md)
 - [英文說明](https://github.com/iml885203/HA-FanSpeedControl/blob/master/README.md)
 
 # 如何運作
+
 當你設定風速時，腳本會自動呼叫多次broadlink service
 
 ## 範例
+
 如果你的風速範圍為1~12
 
 範例1: 當你設定風速從1到5時，會呼叫 `增加` 風速4次
@@ -21,8 +24,8 @@
 
 範例3: 當你設定風速從2到12時，會呼叫 `減少` 風速2次
 
-
 # 安裝
+
 在 HomeAssistant 啟用 [python_script](https://www.home-assistant.io/integrations/python_script/)
 
 - 增加`python_script:`到你的`configuration.yaml`
@@ -34,6 +37,7 @@
 或是直接複製Python腳本到你的`<config>/python_scripts`資料夾裡面
 
 # 參數
+
 |key|required|type|description|
 |-|-|-|-|
 |fan_speed|true|string|speed from fan template|
@@ -46,6 +50,7 @@
 |service_data_decrease|true|object||
 
 # 設定範例
+
 設定在[Fan template](https://www.home-assistant.io/integrations/fan.template/)的 `set_percentage` 上
 
 ```yaml
@@ -69,6 +74,7 @@ set_percentage:
 ```
 
 ## 完整範例
+
 ```yaml
 input_boolean:
   status_fan_power:
@@ -146,7 +152,9 @@ fan:
 ```
 
 # 除錯
+
 增加logger到 `configuration.yaml`
+
 ```yaml
 logger:
   default: warn
@@ -155,12 +163,12 @@ logger:
 ```
 
 # 截圖
+
 ![image](https://github.com/iml885203/HA-FanSpeedControl/blob/master/Screenshot/fan.png?raw=true)
 
 ## 客製化UI
+
 ![image](https://github.com/iml885203/HA-FanSpeedControl/blob/master/Screenshot/fanui.png?raw=true)
-
-
 
 <br><br>
 <p align="center">

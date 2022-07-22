@@ -5,15 +5,17 @@
 
 A python script for Home Assistant that control fan speed with [Fan Template](https://www.home-assistant.io/integrations/fan.template/) and [Broadlink](https://www.home-assistant.io/integrations/broadlink/).
 
-
 # Document
+
 - [Chinese Document](https://github.com/iml885203/HA-FanSpeedControl/blob/master/README_TW.md)
 - [English Document](https://github.com/iml885203/HA-FanSpeedControl/blob/master/README.md)
 
 # How it work
+
 The script automatically call broadlink service when you set fan speed.
 
 ## Example
+
 if your fan speed range is 1~12.
 
 example1: call `increase` fan 4 times when you set fan speed from 1 to 5.
@@ -23,6 +25,7 @@ example2: call `decrease` fan 3 times when you set fan speed from 5 to 2.
 example3: call `decrease` fan 2 times when you set fan speed from 2 to 12.
 
 # Installation
+
 enable [python_script](https://www.home-assistant.io/integrations/python_script/) for your HomeAssistant.
 
 - Add to `configuration.yaml`: `python_script:`
@@ -34,6 +37,7 @@ Find `Fan Speed Control` on HACS automation category.
 Or you can copy the Python script in to your `<config>/python_scripts` directory.
 
 # Script arguments
+
 |key|required|type|description|
 |-|-|-|-|
 |fan_speed|true|string|speed from fan template|
@@ -46,6 +50,7 @@ Or you can copy the Python script in to your `<config>/python_scripts` directory
 |service_data_decrease|true|object||
 
 # Config Example
+
 `set_percentage` on template fan
 
 ```yaml
@@ -53,7 +58,7 @@ set_percentage:
   - service: python_script.fan_speed_control
     data_template:
       fan_speed: "{{ percentage }}"
-      fan_speed_entity_id: 'input_text.status_fan_speed'
+      fan_speed_entity_id: 'input_number.status_fan_speed'
       fan_entity_id: 'fan.bedroom_fan'
       fan_speed_count: 12
       service_domain: 'remote'
@@ -69,14 +74,17 @@ set_percentage:
 ```
 
 ## Template Fan config
+
 ```yaml
 input_boolean:
   status_fan_power:
     name: 'Fan Power'
 
-input_text:
+input_number:
   status_fan_speed:
     name: 'Fan Speed'
+    max: 0
+    max: 100
 
 input_select:
   fan_osc:
@@ -91,7 +99,7 @@ fan:
         friendly_name: "myFan"
         speed_count: 12
         value_template: "{{ states('input_boolean.status_fan_power') }}"
-        percentage_template: "{{ states('input_text.status_fan_speed') | int }}"
+        percentage_template: "{{ states('input_number.status_fan_speed') | int }}"
         oscillating_template: "{{ states('input_select.fan_osc') }}"
         turn_on:
           - condition: state
@@ -119,7 +127,7 @@ fan:
           - service: python_script.fan_speed_control
             data_template:
               fan_speed: "{{ percentage }}"
-              fan_speed_entity_id: 'input_text.status_fan_speed'
+              fan_speed_entity_id: 'input_number.status_fan_speed'
               fan_entity_id: 'fan.bedroom_fan'
               fan_speed_count: 12
               service_domain: 'remote'
@@ -146,7 +154,9 @@ fan:
 ```
 
 # Debug
+
 add logger to your `configuration.yaml`
+
 ```yaml
 logger:
   default: warn
@@ -155,12 +165,17 @@ logger:
 ```
 
 # Screenshot
+
 ![image](https://github.com/iml885203/HA-FanSpeedControl/blob/master/Screenshot/fan.png?raw=true)
 
-## custom ui
+## Custom ui
+
 ![image](https://github.com/iml885203/HA-FanSpeedControl/blob/master/Screenshot/fanui.png?raw=true)
 
+# Todos
 
+- [ ] Refactor arguments, like: remove not used argument `service`
+- [ ] Find some way to get `entity.state` and `fan speed` not by arguments
 
 <br><br>
 <p align="center">
