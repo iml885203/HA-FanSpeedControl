@@ -83,7 +83,7 @@ input_boolean:
 input_number:
   status_fan_speed:
     name: 'Fan Speed'
-    max: 0
+    min: 0
     max: 100
 
 input_select:
